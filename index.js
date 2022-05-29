@@ -1,15 +1,18 @@
 const express = require("express");
-const mongoose = require("mongoose");
+require("./db/db-connection");
 
 const app = express();
 
-mongoose
-  .connect("mongodb://localhost/restful_api_nodejs", {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  })
-  .then(() => console.log("veritabanına bağlanıldı"))
-  .catch((hata) => console.log("db bağlantısında hata! => ",hata));
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
+app.get("/",(req,res)=>{
+    res.status(200).json({'mesaj':"hoşgeldin"})
+})
+
+app.post("/",(req,res)=>{
+  res.status(200).json(req.body)
+})
 
 app.listen(3000, () => {
   console.log("3000 portundan server çalıştı");
