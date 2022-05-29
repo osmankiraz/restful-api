@@ -1,9 +1,12 @@
-@baseUrl= http://localhost:3000
+@BASE_URL= http://localhost:3000
 
-GET {{baseUrl}}
+GET {{BASE_URL}}
 
 ###
-POST {{baseUrl}}
+GET {{BASE_URL}}/99?sortBy=name
+
+###
+POST {{BASE_URL}}
 Content-Type: application/json
 
 {
@@ -11,7 +14,7 @@ Content-Type: application/json
 }
 
 ###
-POST {{baseUrl}}
+POST {{BASE_URL}}
 Content-Type: application/x-www-form-urlencoded
 
 name=osman
