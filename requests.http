@@ -1,30 +1,44 @@
 @BASE_URL= http://localhost:3000/api
 
-GET {{BASE_URL}}
 
-###
+
+### @name GET ALL USERS 
 GET {{BASE_URL}}/users
 
-###
+
+
+### GET SPECIFIC USER ( ONLY ONE )
 GET {{BASE_URL}}/users/2
 
-###
+
+
+### POST NEW USER
 POST {{BASE_URL}}/users
 Content-Type: application/json
 
 {
-    "yenikullanici":"kullanici new"
+    "name" : "osman1",
+    "userName" :" osmnkiraz111",
+    "email":"osmnkiraz111@gmail.com",
+    "password":"1231231231"
 }
-###
-PATCH {{BASE_URL}}/users/123
+
+
+
+### UPDATE SPECIFIC USER 
+PATCH {{BASE_URL}}/users/62952af5bc69b46919efc7e5
 Content-Type: application/json
 
 {
-    "güncelleme":"güncellenen kullanici"
+    "name":"1111231",
+    "email":"osmnkiraz111@gmail.com"
 }
 
-###
-DELETE {{BASE_URL}}/users/112233
+
+
+
+### DELETE SPECIFIC USER
+DELETE {{BASE_URL}}/users/62952af5bc69b46919efc7
 
 
 
