@@ -38,7 +38,7 @@ Content-Type: application/json
 
 
 ### DELETE SPECIFIC USER
-DELETE {{BASE_URL}}/users/62952af5bc69b46919efc7
+DELETE {{BASE_URL}}/users/62952af5bc69b46919efc7e4
 
 
 
