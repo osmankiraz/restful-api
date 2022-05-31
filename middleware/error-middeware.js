@@ -1,16 +1,24 @@
 const catchError = (err, req, res, next) => {
+  if (err.code === 11000) {
+    res.statusCode = 400;
+    return res.json({
+      message: JSON.stringify(err.keyValue) + " should be unique",
+      errorCode: 400,
+    });
+  }
 
-    if (err.name ==="CastError") {
-        res.status(400).json({message:"Please enter valid id"})
-    } else {
-        res.status(err.errorCode).json({
-            message:err.message
-        })
-    }
+  if (err.code === 66) {
+    res.statusCode = 400;
+    return res.json({
+      message: "You can not change immutable field!",
+      errorCode: 400,
+    });
+  }
 
-  res.json({
-      errorMessage:err.message,
-  })
+  res.status(err.statusCode).json({
+    errorCode: err.statusCode,
+    message: err.message,
+  });
 };
 
-module.exports=catchError;
+module.exports = catchError;
