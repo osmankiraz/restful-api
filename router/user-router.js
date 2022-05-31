@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user-model");
+const createError = require("http-errors");
+const { create } = require("../models/user-model");
 
 // This function should get all users
 router.get("/", async (req, res) => {
@@ -26,7 +28,12 @@ router.post("/", async (req, res) => {
 });
 
 // This function should update specific user
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", async (req, res, next) => {
+
+  delete req.body.password;
+  delete req.body.createdAt;
+  delete req.body.updatedAt;
+  
   try {
     const result = await User.findByIdAndUpdate(
       { _id: req.params.id },
@@ -43,7 +50,8 @@ router.patch("/:id", async (req, res) => {
     }
   } catch (error) {
     //  console.log("Error while updating user : ",error)
-    return res.status(404).json({ message: error });
+    // return res.status(404).json({ message: error });
+    next(createError(400,error));
   }
 });
 
@@ -56,12 +64,12 @@ router.delete("/:id", async (req, res, next) => {
     } else {
       // return res.status(404).json({ message: "User not found" });
       // throw new Error('User not found')
-      const error = new Error("User not found");
-      error.errorCode = 404;
-      throw error;
+      // const error = new Error("User not found");
+      // error.errorCode = 404;
+      throw createError(404, "User not found");
     }
   } catch (error) {
-    next(error);
+    next(createError(400, err));
     // console.log("Error while deleting user : ", error);
     // return res.status(404).json({ message: error });
   }
