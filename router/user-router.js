@@ -31,7 +31,7 @@ router.patch("/:id", async (req, res) => {
     const result = await User.findByIdAndUpdate(
       { _id: req.params.id },
       req.body,
-      { new: true ,runValidators:true}
+      { new: true, runValidators: true }
     );
     if (result) {
       res.json({
@@ -43,22 +43,27 @@ router.patch("/:id", async (req, res) => {
     }
   } catch (error) {
     //  console.log("Error while updating user : ",error)
-     return res.status(404).json({ message: error });
+    return res.status(404).json({ message: error });
   }
 });
 
 // This function should delete specific user
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const result = await User.findByIdAndDelete({ _id: req.params.id });
     if (result) {
       return res.json({ message: "User deleted" });
     } else {
-      return res.status(404).json({ message: "User not found" });
+      // return res.status(404).json({ message: "User not found" });
+      // throw new Error('User not found')
+      const error = new Error("User not found");
+      error.errorCode = 404;
+      throw error;
     }
   } catch (error) {
-    console.log("Error while deleting user : ", error);
-    return res.status(404).json({ message: error });
+    next(error);
+    // console.log("Error while deleting user : ", error);
+    // return res.status(404).json({ message: error });
   }
 });
 
