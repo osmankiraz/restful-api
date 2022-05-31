@@ -30,8 +30,8 @@ PATCH {{BASE_URL}}/users/62952af5bc69b46919efc7e5
 Content-Type: application/json
 
 {
-    "name":"1111231",
-    "email":"osmnkiraz111@gmail.com"
+    "password":"yeni şifte",
+    "name":"yeni isim"
 }
 
 
