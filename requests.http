@@ -18,8 +18,8 @@ Content-Type: application/json
 
 {
     "name" : "osman1",
-    "userName" :" osmnkiraz111",
-    "email":"osmnkiraz111@gmail.com",
+    "userName" :" osms",
+    "email":"osmnkiraz111s2323@gmail.com",
     "password":"1231231231"
 }
 
@@ -30,8 +30,7 @@ PATCH {{BASE_URL}}/users/62952af5bc69b46919efc7e5
 Content-Type: application/json
 
 {
-    "password":"yeni şifte",
-    "name":"yeni isim"
+    "name":"yse"
 }
 
 
