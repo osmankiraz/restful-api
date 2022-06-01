@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Joi = require("@hapi/joi");
+
 
 const UserSchema = new Schema(
   {
@@ -36,6 +38,38 @@ const UserSchema = new Schema(
   // Bu değeri istediğimi collection name ile değiştirmek için bu şekilde option objesi içine yazabiliriz.
   { collection: "users", timestamps:true }
 );
+
+const schema=Joi.object({
+  name: Joi.string().min(3).max(50).trim(),
+  userName:Joi.string().min(3).max(50).trim(),
+  email:Joi.string().trim().email(), // unique kontrolunun yapılmamasının sebebi veritabanına gitmeden önce yapılan bir işlem olmasıdır.
+  password:Joi.string().trim()
+});
+
+// It uses create new user
+UserSchema.methods.joiValidation=function(userObject){
+  schema.required();
+  return schema.validate(userObject);
+}
+
+// It uses update user
+UserSchema.statics.joiValidationForUpdate=function(userObject){
+  return schema.validate(userObject);
+}
+
+UserSchema.methods.toJSON=function(){
+  const user = this.toObject();
+  delete user._id;
+  delete user.createdAt;
+  delete user.updatedAt;
+  delete user.password;
+  delete user.__v;
+
+  return user;
+}
+
+
+
 
 const User = mongoose.model("User", UserSchema);
 
