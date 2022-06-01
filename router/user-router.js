@@ -17,42 +17,56 @@ router.get("/:id", (req, res) => {
 });
 
 // This function should post new user
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const newUser = new User(req.body);
-    const result = await newUser.save();
-    res.json(result);
+    const { error, sonuc } = newUser.joiValidation(req.body);
+
+    if (error) {
+      next(createError(400, error));
+    } else {
+      const result = await newUser.save();
+      res.json(result);
+    }
   } catch (error) {
+    next(error);
     console.log("Error while adding user : ", error);
   }
 });
 
 // This function should update specific user
 router.patch("/:id", async (req, res, next) => {
-
   delete req.body.password;
   delete req.body.createdAt;
   delete req.body.updatedAt;
-  
-  try {
-    const result = await User.findByIdAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (result) {
-      res.json({
-        message: ` User with ${req.params.id} id updated`,
-        value: result,
-      });
-    } else {
-      return res.status(404).json({ message: "User not found" });
+
+  const { error, value } = User.joiValidationForUpdate(req.body);
+
+  if(error){
+    next(createError(400,error))
+  }else{
+    try {
+      const result = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        { new: true, runValidators: true }
+      );
+      if (result) {
+        res.json({
+          message: ` User with ${req.params.id} id updated`,
+          value: result,
+        });
+      } else {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      //  console.log("Error while updating user : ",error)
+      // return res.status(404).json({ message: error });
+      next(createError(400, error));
     }
-  } catch (error) {
-    //  console.log("Error while updating user : ",error)
-    // return res.status(404).json({ message: error });
-    next(createError(400,error));
   }
+
+ 
 });
 
 // This function should delete specific user
