@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user-model");
 const createError = require("http-errors");
-const { create } = require("../models/user-model");
+const bcrypt = require("bcrypt");
 
 // This function should get all users
 router.get("/", async (req, res) => {
@@ -20,6 +20,7 @@ router.get("/:id", (req, res) => {
 router.post("/", async (req, res, next) => {
   try {
     const newUser = new User(req.body);
+    newUser.password = await bcrypt.hash(newUser.password, 10);
     const { error, sonuc } = newUser.joiValidation(req.body);
 
     if (error) {
@@ -34,17 +35,30 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.post("/login", async (req, res, next) => {
+  try {
+    const user = await User.login(req.body.email, req.body.password);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // This function should update specific user
 router.patch("/:id", async (req, res, next) => {
-  delete req.body.password;
+  // delete req.body.password;
   delete req.body.createdAt;
   delete req.body.updatedAt;
 
+  if (req.body.hasOwnProperty("password")) {
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+  }
+
   const { error, value } = User.joiValidationForUpdate(req.body);
 
-  if(error){
-    next(createError(400,error))
-  }else{
+  if (error) {
+    next(createError(400, error));
+  } else {
     try {
       const result = await User.findByIdAndUpdate(
         { _id: req.params.id },
@@ -65,8 +79,6 @@ router.patch("/:id", async (req, res, next) => {
       next(createError(400, error));
     }
   }
-
- 
 });
 
 // This function should delete specific user
