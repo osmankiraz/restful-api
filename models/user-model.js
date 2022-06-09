@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const Joi = require("@hapi/joi");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new Schema(
   {
@@ -51,6 +52,18 @@ const schema = Joi.object({
 UserSchema.methods.joiValidation = function (userObject) {
   schema.required();
   return schema.validate(userObject);
+};
+
+UserSchema.methods.generateToken = async function () {
+  const loggedUser = this;
+  const token = await jwt.sign(
+    {
+      _id: loggedUser._id
+    },
+    "secretkey",
+    { expiresIn: "1h" }
+  );
+  return token;
 };
 
 UserSchema.statics.login = async (email, password) => {
