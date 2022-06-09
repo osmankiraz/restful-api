@@ -12,10 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", userRouter);
 
-app.get("/", (req, res) => {
+/* app.get("/", (req, res) => {
   res.status(200).json({ mesaj: "hoşgeldin" });
 });
-
+ */
 app.use(errorMiddleware);
 
 app.listen(3000, () => {
