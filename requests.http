@@ -42,6 +42,16 @@ Content-Type: application/json
 }
 
 
+### UPDATE ME
+PATCH {{BASE_URL}}/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjlmYTk5YTExZTI3NWVhZmIxNjE1MjEiLCJpYXQiOjE2NTQ4MDA5OTcsImV4cCI6MTY1NDgwNDU5N30.WKWKp6rAeMsJG98WIkFsm4j_EXlKsVDjQy0bYEDWv3U
+
+{
+    "email":"UpdatedMail@gmail.com"
+}
+
+
 
 
 ### DELETE SPECIFIC USER
