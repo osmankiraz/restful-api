@@ -3,9 +3,10 @@ const User = require("../models/user-model");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const authMiddleware = require("../middleware/auth-middleware");
+const adminMiddleware = require("../middleware/admin-middleware");
 
 // This function should get all users
-router.get("/", async (req, res) => {
+router.get("/", [authMiddleware, adminMiddleware], async (req, res) => {
   const allUsers = await User.find({});
   res.json(allUsers);
 });
@@ -16,42 +17,39 @@ router.get("/me", authMiddleware, (req, res) => {
 });
 
 router.patch("/me", authMiddleware, async (req, res) => {
-    // delete req.body.password;
-    delete req.body.createdAt;
-    delete req.body.updatedAt;
-  
-    if (req.body.hasOwnProperty("password")) {
-      req.body.password = await bcrypt.hash(req.body.password, 10);
-    }
-  
-    const { error, value } = User.joiValidationForUpdate(req.body);
-  
-    if (error) {
-      next(createError(400, error));
-    } else {
-      try {
-        const result = await User.findByIdAndUpdate(
-          { _id: req.user._id },
-          req.body,
-          { new: true, runValidators: true }
-        );
-        if (result) {
-          res.json({
-            message: ` User with ${req.user._id} id updated`,
-            value: result,
-          });
-        } else {
-          return res.status(404).json({ message: "User not found" });
-        }
-      } catch (error) {
-        //  console.log("Error while updating user : ",error)
-        // return res.status(404).json({ message: error });
-        next(createError(400, error));
+  // delete req.body.password;
+  delete req.body.createdAt;
+  delete req.body.updatedAt;
+
+  if (req.body.hasOwnProperty("password")) {
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+  }
+
+  const { error, value } = User.joiValidationForUpdate(req.body);
+
+  if (error) {
+    next(createError(400, error));
+  } else {
+    try {
+      const result = await User.findByIdAndUpdate(
+        { _id: req.user._id },
+        req.body,
+        { new: true, runValidators: true }
+      );
+      if (result) {
+        res.json({
+          message: ` User with ${req.user._id} id updated`,
+          value: result,
+        });
+      } else {
+        return res.status(404).json({ message: "User not found" });
       }
+    } catch (error) {
+      //  console.log("Error while updating user : ",error)
+      // return res.status(404).json({ message: error });
+      next(createError(400, error));
     }
-  
-
-
+  }
 });
 
 // This function should get specific user
@@ -131,6 +129,37 @@ router.patch("/:id", async (req, res, next) => {
   }
 });
 
+
+
+// This function shoul delete all users
+router.delete("/deleteAll",[authMiddleware,adminMiddleware], async (req, res, next) => {
+  try {
+    const result = await User.deleteMany({ isAdmin: false });
+    if (result) {
+      return res.json({ message: "Users deleted" });
+    } else {
+      throw createError(404, "User not found");
+    }
+  } catch (error) {
+    next(createError(400, err));
+
+  }
+});
+
+router.delete("/me",[authMiddleware], async (req, res, next) => {
+  try {
+    const result = await User.findByIdAndDelete({ _id: req.user._id });
+    if (result) {
+      return res.json({ message: "Deleted yourself" });
+    } else {
+      throw createError(404, "User not found");
+    }
+  } catch (error) {
+    next(createError(400, err));
+
+  }
+});
+
 // This function should delete specific user
 router.delete("/:id", async (req, res, next) => {
   try {
@@ -149,6 +178,6 @@ router.delete("/:id", async (req, res, next) => {
     // console.log("Error while deleting user : ", error);
     // return res.status(404).json({ message: error });
   }
-});
+}); 
 
 module.exports = router;
