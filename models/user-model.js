@@ -35,6 +35,10 @@ const UserSchema = new Schema(
       trim: true,
       required: true,
     },
+    isAdmin:{
+      type:Boolean,
+      default:false
+    }
   },
   // Normalde verdiğimiz schema isminin sonuna default olarak s takısı getirilerek collection isimi oluşur
   // Bu değeri istediğimi collection name ile değiştirmek için bu şekilde option objesi içine yazabiliriz.
