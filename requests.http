@@ -1,5 +1,5 @@
 @BASE_URL= http://localhost:3000/api
-@TOKEN =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmE3ODNhNTI2Y2QzMzQ0ZjU5MmQ3NTgiLCJpYXQiOjE2NTUxNDU0OTQsImV4cCI6MTY1NTE0OTA5NH0.NRgeyY-lmcdWO-stZqpAP4hnNP3cqkIZVPLzlYxDLX8
+@TOKEN =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmE3NzdmYmQ5OGM2MWQ1YjI5NmVjNzYiLCJpYXQiOjE2NTUxNDY1NTEsImV4cCI6MTY1NTE1MDE1MX0.S-Dvwj2pEEYSENCmP_hUNyIV4GYrUmBLHMAADcjhGIs
 
 
 ### @name GET ALL USERS 
@@ -17,9 +17,9 @@ POST {{BASE_URL}}/users
 Content-Type: application/json
 
 {
-    "name" : "osman2",
-    "userName" :"username2",
-    "email":"osman2@gmail.com",
+    "name" : "osman22",
+    "userName" :"username22",
+    "email":"osman22@gmail.com",
     "password":"123123"
 }
 
@@ -28,7 +28,7 @@ POST {{BASE_URL}}/users/login
 Content-Type: application/json
 
 {
-    "email":"osman2@gmail.com",
+    "email":"osman@gmail.com",
     "password":"123123"
 }
 
