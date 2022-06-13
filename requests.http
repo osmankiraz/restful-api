@@ -1,10 +1,10 @@
 @BASE_URL= http://localhost:3000/api
-
+@TOKEN =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmE3ODNhNTI2Y2QzMzQ0ZjU5MmQ3NTgiLCJpYXQiOjE2NTUxNDU0OTQsImV4cCI6MTY1NTE0OTA5NH0.NRgeyY-lmcdWO-stZqpAP4hnNP3cqkIZVPLzlYxDLX8
 
 
 ### @name GET ALL USERS 
 GET {{BASE_URL}}/users
-
+Authorization: Bearer {{TOKEN}}
 
 
 ### GET SPECIFIC USER ( ONLY ONE )
@@ -17,9 +17,9 @@ POST {{BASE_URL}}/users
 Content-Type: application/json
 
 {
-    "name" : "osman",
-    "userName" :"username",
-    "email":"osman@gmail.com",
+    "name" : "osman2",
+    "userName" :"username2",
+    "email":"osman2@gmail.com",
     "password":"123123"
 }
 
@@ -28,7 +28,7 @@ POST {{BASE_URL}}/users/login
 Content-Type: application/json
 
 {
-    "email":"osman@gmail.com",
+    "email":"osman2@gmail.com",
     "password":"123123"
 }
 
@@ -57,5 +57,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjlmYTk5Y
 ### DELETE SPECIFIC USER
 DELETE {{BASE_URL}}/users/62952af5bc69b46919efc7e4
 
+
+
+### DELETE ALL USERS
+DELETE {{BASE_URL}}/users/deleteAll
+Authorization: Bearer {{TOKEN}}
+
+
+
+### DELETE YOU
+DELETE {{BASE_URL}}/users/me
+Authorization: Bearer {{TOKEN}}
 
 
